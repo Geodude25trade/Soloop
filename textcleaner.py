@@ -12,7 +12,7 @@ class TextCleaner:
     def exclude(text):
         if isinstance(text, str):
             text = text.split(" ")
-        with open('words.json') as json_file:
+        with open('data/words.json') as json_file:
             words = json.load(json_file)
         trimmed = []
         for string in text:
