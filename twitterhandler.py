@@ -84,9 +84,6 @@ def get_tweets(refresh=False, num_tweets=2000, clean=True):
     if clean:
         if isinstance(tweets, list):
             tweets = " ".join(tweets)
-
-        # Clean the text saving only letters
-        tweets = re.sub(r"[^a-zA-Z]+", " ", tweets)
     return tweets
 
 

@@ -6,11 +6,12 @@ from nrclexicon import NRCLexicon
 class EmotionAnalyzer:
     data = {}
 
-    def __init__(self, name, text):
+    def __init__(self, name, text=None):
         self.path = "data/artefacts/" + name + "/"
         self.filename = name + ".json"
         self.name = name
         self.data["text"] = text
+        self.__load__()
 
     def analyze(self):
         self.data["emotions"] = {}
@@ -22,6 +23,10 @@ class EmotionAnalyzer:
                     else:
                         self.data["emotions"][emotion] += NRCLexicon.data[word][emotion]
         self.__save__()
+
+    def print_data(self):
+        for emotion in self.data["emotions"]:
+            print(f"{emotion}: {self.data['emotions'][emotion]}")
 
     def __save__(self):
         if not os.path.exists(f"{self.path}"):
