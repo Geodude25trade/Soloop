@@ -6,11 +6,7 @@ class TextCleaner:
 
     @staticmethod
     def letters(text, replace=" "):
-        re.sub(r"[^a-zA-Z]+", replace, text)
-
-    @staticmethod
-    def numbers(text, replace=" "):
-        re.sub(r"[^a-zA-Z]+", replace, text)
+        return re.sub(r"[^a-zA-Z]+", replace, text)
 
     @staticmethod
     def exclude(text):
