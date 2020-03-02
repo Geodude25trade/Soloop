@@ -51,17 +51,21 @@ class MyStreamer:
         self.listener = listener
         self.stream = Stream(auth=api.auth, listener=listener)
 
-    def stream_tweets(self):
+    def sample_tweets(self):
         self.stream.sample(languages=['en'], is_async=True)
 
+    def filter_tweets(self, track):
+        self.stream.filter(languages=['en'], is_async=True, track=track)
 
-def get_tweets(refresh=False, num_tweets=2000, clean=True):
+
+def get_tweets(refresh=False, num_tweets=2000, clean=True, track=None):
     """
 
-    @param refresh:
-    @param num_tweets:
-    @param clean:
-    @return:
+    :param refresh:
+    :param num_tweets:
+    :param clean:
+    :return:
+    :param track:
     """
     tweets = []
     if not os.path.exists('data/tweets.json'):
@@ -69,8 +73,11 @@ def get_tweets(refresh=False, num_tweets=2000, clean=True):
     if refresh:
         sys_listener = MyStreamListener("data/tweets.json")
         sys_stream = MyStreamer(sys_listener)
+        if filter is None:
+            sys_stream.sample_tweets()
+        else:
+            sys_stream.filter_tweets(track)
 
-        sys_stream.stream_tweets()
         while True:
             if len(sys_listener.tweets) >= num_tweets:
                 sys_stream.stream.disconnect()

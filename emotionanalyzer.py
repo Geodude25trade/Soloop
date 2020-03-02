@@ -11,7 +11,7 @@ class EmotionAnalyzer:
         self.filename = name + ".json"
         self.name = name
         self.data["text"] = text
-        self.__load__()
+        # self.__load__()
 
     def analyze(self):
         self.data["emotions"] = {}
