@@ -76,6 +76,7 @@ def add_article(article, text):
 
             # And add their new values
             update_table_totals(article, words)
+    save_model()
 
 
 def update_table_totals(article, words):
@@ -140,7 +141,7 @@ def open_model():
 
 
 if __name__ == "__main__":
-    open_model()
+    model = open_model()
     # model = create_data()
     compute_table_total()
     save_model()

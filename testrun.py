@@ -21,6 +21,7 @@ def main():
     for article in data:
         if article["content"] is not None:
             chisquaredmodel.add_article(article["url"], article["content"])
+    chisquaredmodel.compute_table_total()
     chisquaredmodel.calculate_article(data[0]["url"], data[0]["content"])
 
 

@@ -48,11 +48,15 @@ class GoogleNews:
 
 
 if __name__ == '__main__':
-    for i in range(8):
+    data = GoogleNews.get_articles_new()
+    for art in data:
+        if art["content"] is not None:
+            chisquaredmodel.add_article(art["url"], art["content"])
+    while True:
+        print("Sleeping for 15 minutes")
+        time.sleep(900)
         data = GoogleNews.get_articles_new()
+        print(data[0])
         for art in data:
             if art["content"] is not None:
                 chisquaredmodel.add_article(art["url"], art["content"])
-        print(len(data))
-        print("Sleeping for 15 minutes")
-        time.sleep(900)
