@@ -29,7 +29,7 @@ class Guardian:
         year = datetime.datetime.now().year
         for y in range(2000, year):
             for m in range(1, 13):
-                self.add_setting("from-date", f"{y}-{str(m).zfill(2)}-01")
+                self.add_setting("from-date", f"{y}-{str(m).zfill(2)}-02")
                 if m == 12:
                     self.add_setting("to-date", f"{y + 1}-01-01")
                 else:
