@@ -50,7 +50,7 @@ class Guardian:
         results = self.search()
         if results.status_code == 200:
             self.tries = 0
-            data = results.json()['repsonse']
+            data = results.json()['response']
             self.articles.append(data['results'])
             return data['pages']
         elif self.tries < 5:
