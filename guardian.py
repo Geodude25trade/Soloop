@@ -34,12 +34,13 @@ class Guardian:
                     self.add_setting("to-date", f"{y + 1}-01-01")
                 else:
                     self.add_setting("to-date", f"{y}-{str(m + 1).zfill(2)}-01")
-                print(f"{self.settings['from-date']} <--> {self.settings['to-date']}")
+                print(f"\n{self.settings['from-date']} <--> {self.settings['to-date']}")
                 self.add_setting("page", 1)
                 pages = self.__get_articles()
-                print(f"starting at page 1 of {pages} pages...\n")
+                print(f"starting at page 1 of {pages} pages...")
                 time.sleep(17.28)
                 for i in range(2, pages + 1):
+                    print(f"page {i}...")
                     self.add_setting("page", i)
                     self.__get_articles()
                     time.sleep(17.28)
