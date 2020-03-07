@@ -43,7 +43,7 @@ class GoogleNews:
                 data[article["url"]] = article["content"]
         if not os.path.exists("data/news/"):
             os.makedirs("data/news/")
-        with open("data/news/articles.json", "w") as file:
+        with open("data/news/articles.OLD.json", "w") as file:
             json.dump(data, file)
 
 

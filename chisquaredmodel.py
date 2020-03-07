@@ -4,7 +4,7 @@ from textcleaner import TextCleaner
 
 
 def create_data():
-    with open("data/news/articles.json", "r") as file:
+    with open("data/news/articles.OLD.json", "r") as file:
         articles = json.load(file)
     data = {'articles': {}, 'words': {}, 'totalxy': 0}
     for article in articles:
@@ -118,7 +118,6 @@ def calculate_article(article, text):
             interests[word] = csc
 
         # Add the interests to the user object and print the interests
-        print(interests)
         save_model()
         return interests
     else:
@@ -127,15 +126,15 @@ def calculate_article(article, text):
 
 
 def save_model():
-    with open('data/chiSqModel.json', 'w') as file:
+    with open('data/chiSqModel.OLD.json', 'w') as file:
         json.dump(model, file)
 
 
 def open_model():
-    if not os.path.exists('data/chiSqModel.json'):
+    if not os.path.exists('data/chiSqModel.OLD.json'):
         data = create_data()
     else:
-        with open('data/chiSqModel.json', 'r') as file:
+        with open('data/chiSqModel.OLD.json', 'r') as file:
             data = json.load(file)
     return data
 

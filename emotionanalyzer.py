@@ -25,8 +25,15 @@ class EmotionAnalyzer:
         self.__save__()
 
     def print_data(self):
+        posneg = self.data["emotions"]["Positive"] + self.data["emotions"]["Negative"]
+        other = self.data["emotions"]["Anger"] + self.data["emotions"]["Anticipation"] + self.data["emotions"][
+            "Disgust"] + self.data["emotions"]["Fear"] + self.data["emotions"]["Joy"] + self.data["emotions"][
+                    "Sadness"] + self.data["emotions"]["Surprise"] + self.data["emotions"]["Trust"]
         for emotion in self.data["emotions"]:
-            print(f"{emotion}: {self.data['emotions'][emotion]}")
+            if emotion in "Positive" or emotion in "Negative":
+                print(f"{emotion}: {round((self.data['emotions'][emotion] / posneg) * 100, 3)}")
+            else:
+                print(f"{emotion}: {round((self.data['emotions'][emotion] / other) * 100, 3)}")
 
     def __save__(self):
         if not os.path.exists(f"{self.path}"):

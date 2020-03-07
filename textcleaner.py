@@ -13,6 +13,7 @@ class TextCleaner:
 
     @staticmethod
     def letters(text, replace=" "):
+        text = text.lower()
         return re.sub(r"[^a-zA-Z]+", replace, text)
 
     @classmethod
