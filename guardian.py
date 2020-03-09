@@ -13,11 +13,13 @@ class Guardian:
     api_key = ""
     url = "https://content.guardianapis.com/"
 
-    def __init__(self, api_key="5046ff4b-1de1-4cd7-ba17-ace15f3e94ed"):
+    def __init__(self, api_key="5046ff4b-1de1-4cd7-ba17-ace15f3e94ed", load_cached=False):
         self.api_key = api_key
         self.settings = {"api-key": api_key}
         self.articles = []
         self.tries = 0
+        if load_cached:
+            self.__load_articles()
 
     def add_setting(self, key, value):
         self.settings[key] = value
@@ -44,8 +46,22 @@ class Guardian:
                     self.add_setting("page", i)
                     self.__get_articles()
                     time.sleep(17.28)
-        with open("data/news/articles.json", "w") as file:
-            json.dump(self.articles, file)
+        self.__save_articles()
+
+    def __save_articles(self):
+        if os.path.isdir("data/news/"):
+            with open("data/news/articles.json", "w") as file:
+                json.dump(self.articles, file)
+        else:
+            os.makedirs("data/news/")
+            self.__save_articles()
+
+    def __load_articles(self):
+        if os.path.exists("data/news/articles.json"):
+            with open("data/news/articles.json", "r") as file:
+                self.articles = json.load(file)
+        else:
+            print("Could not load cached articles")
 
     def __get_articles(self):
         results = self.search()
@@ -60,11 +76,12 @@ class Guardian:
             time.sleep(120)
             self.__get_articles()
         else:
+            self.__save_articles()
             raise ConnectionError
 
 
 if __name__ == '__main__':
-    news = Guardian()
+    news = Guardian(load_cached=True)
     news.add_setting("show-fields", "bodyText")
     news.add_setting("page-size", 200)
     news.add_setting("order-by", "oldest")
