@@ -25,7 +25,10 @@ class Guardian:
         self.settings[key] = value
 
     def search(self):
-        return requests.get(self.url + "search", self.settings)
+        try:
+            return requests.get(self.url + "search", self.settings)
+        except requests.exceptions.ConnectionError:
+            self.__save_articles()
 
     def search_full(self):
         year = datetime.datetime.now().year
@@ -65,6 +68,7 @@ class Guardian:
 
     def __get_articles(self):
         results = self.search()
+
         if results.status_code == 200:
             self.tries = 0
             data = results.json()['response']
