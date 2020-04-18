@@ -31,8 +31,12 @@ class Guardian:
             self.__save_articles()
 
     def search_full(self):
+        if len(self.articles) > 0:
+            start_year = int(self.articles[-1]["webPublicationDate"][:4])
+        else:
+            start_year = 2000
         year = datetime.datetime.now().year
-        for y in range(2000, year):
+        for y in range(start_year, year):
             for m in range(1, 13):
                 self.add_setting("from-date", f"{y}-{str(m).zfill(2)}-02")
                 if m == 12:
@@ -56,7 +60,7 @@ class Guardian:
         if results.status_code == 200:
             self.tries = 0
             data = results.json()['response']
-            self.articles.append(data['results'])
+            self.articles.extend(x for x in data['results'] if x not in self.articles)
             return data['pages']
         elif results.status_code == 429:
             if self.tries < 1:
