@@ -43,13 +43,44 @@ class Guardian:
                 self.add_setting("page", 1)
                 pages = self.__get_articles()
                 print(f"starting at page 1 of {pages} pages...")
-                time.sleep(17.28)
+                # time.sleep(17.28)
                 for i in range(2, pages + 1):
                     print(f"page {i}...")
                     self.add_setting("page", i)
                     self.__get_articles()
-                    time.sleep(17.28)
+                    # time.sleep(17.28)
         self.__save_articles()
+
+    def __get_articles(self):
+        results = self.search()
+        if results.status_code == 200:
+            self.tries = 0
+            data = results.json()['response']
+            self.articles.append(data['results'])
+            return data['pages']
+        elif results.status_code == 429:
+            if self.tries < 1:
+                self.tries += 1
+                print(
+                    f"Received status code {results.status_code} for reason {results.reason}... sleeping for one second")
+                time.sleep(1)
+                self.__get_articles()
+            elif self.tries < 3:
+                time.sleep(86400)
+                self.__get_articles()
+            else:
+                self.__save_articles()
+                raise ConnectionError
+        else:
+            if self.tries < 5:
+                self.tries += 1
+                print(
+                    f"Received status code {results.status_code} for reason {results.reason}... sleeping for 5 minutes")
+                time.sleep(300)
+                self.__get_articles()
+            else:
+                self.__save_articles()
+                raise ConnectionError
 
     def __save_articles(self):
         if os.path.isdir("data/news/"):
@@ -65,23 +96,6 @@ class Guardian:
                 self.articles = json.load(file)
         else:
             print("Could not load cached articles")
-
-    def __get_articles(self):
-        results = self.search()
-
-        if results.status_code == 200:
-            self.tries = 0
-            data = results.json()['response']
-            self.articles.append(data['results'])
-            return data['pages']
-        elif self.tries < 5:
-            self.tries += 1
-            print("sleeping for two minutes")
-            time.sleep(120)
-            self.__get_articles()
-        else:
-            self.__save_articles()
-            raise ConnectionError
 
 
 if __name__ == '__main__':
