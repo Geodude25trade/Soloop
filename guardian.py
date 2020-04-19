@@ -57,6 +57,9 @@ class Guardian:
 
     def __get_articles(self):
         results = self.search()
+        if results is None:
+            self.__save_articles()
+            self.__get_articles()
         if results.status_code == 200:
             self.tries = 0
             data = results.json()['response']
