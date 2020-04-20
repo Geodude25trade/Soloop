@@ -49,7 +49,7 @@ class Guardian:
                 print(f"starting at page 1 of {pages} pages...")
                 # time.sleep(17.28)
                 for i in range(2, pages + 1):
-                    print(f"page {i}...")
+                    # print(f"page {i}...")
                     self.add_setting("page", i)
                     self.__get_articles()
                     # time.sleep(17.28)
@@ -58,6 +58,7 @@ class Guardian:
     def __get_articles(self):
         results = self.search()
         if results is None:
+            print("Got none. Saving and retrying...")
             self.__save_articles()
             self.__get_articles()
         if results.status_code == 200:
@@ -66,7 +67,7 @@ class Guardian:
             self.articles.extend(x for x in data['results'] if x not in self.articles)
             return data['pages']
         elif results.status_code == 429:
-            if self.tries < 1:
+            if self.tries < 2:
                 self.tries += 1
                 print(
                     f"Received status code {results.status_code} for reason {results.reason}... sleeping for one second")
@@ -83,6 +84,7 @@ class Guardian:
                 self.tries += 1
                 print(
                     f"Received status code {results.status_code} for reason {results.reason}... sleeping for 5 minutes")
+                self.__save_articles()
                 time.sleep(300)
                 self.__get_articles()
             else:
